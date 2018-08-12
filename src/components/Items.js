@@ -10,9 +10,15 @@ class Items extends Component {
                 case 'Target':
                     retailerLogo = 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Target_logo.svg/100px-Target_logo.svg.png';
                     break;
+                case 'Walmart':
+                    retailerLogo = 'http://thenewsafrica.com/wp-content/uploads/2018/07/walmart-logo-free-transparent-png-logos-walmart-logo-png-design-logo.jpg';
+                    break;
+                default:
+                    retailerLogo = 'https://upload.wikimedia.org/wikipedia/commons/5/5a/Antu_amarok_cart_view.svg'
             }
             return <ItemBox 
             key={link._id} 
+            openModal={ this.props.openModal }
             img_url={link.img_url} 
             name={link.name} 
             quantity={link.quantity}

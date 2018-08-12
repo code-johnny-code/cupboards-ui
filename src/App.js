@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import ReactModal from 'react-modal';
 import logo from './logo.svg';
 import './App.css';
 import Items from './components/Items';
@@ -8,15 +9,27 @@ class App extends Component {
     super(props)
 
     this.state = {
-      items: []
+      items: [],
+      showModal: false
     }
+
+    this.handleOpenModal = this.handleOpenModal.bind(this);
+    this.handleCloseModal = this.handleCloseModal.bind(this);
   }
 
   componentWillMount() {
-    this._retrieveItems();
+    this.retrieveItems();
   }
 
-  _retrieveItems() {
+  handleOpenModal () {
+    this.setState({ showModal: true });
+  }
+  
+  handleCloseModal () {
+    this.setState({ showModal: false });
+  }
+
+  retrieveItems() {
     const { REACT_APP_LIST_URL } = process.env;
     const fetch = require('node-fetch');
     fetch(REACT_APP_LIST_URL)
@@ -31,11 +44,14 @@ class App extends Component {
   render() {
     return (
       <div className="App">
+        <ReactModal isOpen={this.state.showModal} contentLabel="Minimal Modal Example">
+          <button onClick={this.handleCloseModal}>Close Modal</button>
+        </ReactModal>
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
+          <h1 className="App-title">Welcome to Cupboards</h1>
         </header>
-        <Items items={ this.state.items }/>
+        <Items items={ this.state.items } openModal={ this.handleOpenModal } />
       </div>
     );
   }

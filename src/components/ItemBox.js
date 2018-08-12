@@ -13,7 +13,7 @@ class ItemBox extends Component {
                 <img className={ 'itemImg' } src={this.props.img_url} alt={this.props.name}/>
                 <div>
                     <p>{ this.props.name }</p>
-                    <button>BUTTON FOR SOMETHING</button>
+                    <button onClick={ this.props.openModal } >BUTTON FOR SOMETHING</button>
                 </div>
                 <div className={ 'retailerBox' }>
                     <img className={ 'retailerLogo' } src={this.props.retailerLogo} alt={this.props.retailer} /> 
