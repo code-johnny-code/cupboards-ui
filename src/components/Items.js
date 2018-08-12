@@ -18,7 +18,7 @@ class Items extends Component {
             }
             return <ItemBox 
             key={link._id} 
-            openModal={ this.props.openModal }
+            handleOpenModal={ this.props.handleOpenModal }
             img_url={link.img_url} 
             name={link.name} 
             quantity={link.quantity}

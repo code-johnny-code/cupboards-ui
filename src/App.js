@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import ReactModal from 'react-modal';
 import logo from './logo.svg';
 import './App.css';
 import Items from './components/Items';
+import ItemModal from './components//ItemModal';
 
 class App extends Component {
   constructor(props) {
@@ -10,7 +10,8 @@ class App extends Component {
 
     this.state = {
       items: [],
-      showModal: false
+      showModal: false,
+      activeItem: {}
     }
 
     this.handleOpenModal = this.handleOpenModal.bind(this);
@@ -21,8 +22,8 @@ class App extends Component {
     this.retrieveItems();
   }
 
-  handleOpenModal () {
-    this.setState({ showModal: true });
+  handleOpenModal (item) {
+    this.setState({ showModal: true, activeItem: item });
   }
   
   handleCloseModal () {
@@ -44,14 +45,12 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <ReactModal isOpen={this.state.showModal} contentLabel="Minimal Modal Example">
-          <button onClick={this.handleCloseModal}>Close Modal</button>
-        </ReactModal>
+        <ItemModal handleCloseModal={ this.handleCloseModal } showModal={ this.state.showModal } item={ this.state.activeItem }/>
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
           <h1 className="App-title">Welcome to Cupboards</h1>
         </header>
-        <Items items={ this.state.items } openModal={ this.handleOpenModal } />
+        <Items items={ this.state.items } handleOpenModal={ this.handleOpenModal } />
       </div>
     );
   }
