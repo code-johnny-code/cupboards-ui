@@ -5,8 +5,19 @@ class ItemBox extends Component {
     render() {
         return (
             <div className={ 'container' }>
-                <img src={this.props.img_url} alt={this.props.name}/>
-                <p>{ this.props.name }</p>
+                <div className={ 'numberLoc' }>
+                    <p className={ 'quantity' }>{ this.props.quantity }</p>
+                    <p className={ 'exp' }>{ this.props.expiration }</p>
+                    <p className={ 'location' }>{ this.props.location }</p>
+                </div>
+                <img className={ 'itemImg' } src={this.props.img_url} alt={this.props.name}/>
+                <div>
+                    <p>{ this.props.name }</p>
+                    <button>BUTTON FOR SOMETHING</button>
+                </div>
+                <div className={ 'retailerBox' }>
+                    <img className={ 'retailerLogo' } src={this.props.retailerLogo} alt={this.props.retailer} /> 
+                </div>
             </div>
         );
     }
