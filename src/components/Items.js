@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import ItemBox from './ItemBox'
+import 'core-js/es6/map';
 
 class Items extends Component {
     
@@ -25,7 +26,8 @@ class Items extends Component {
             location={link.location}
             expiration={link.expiration}
             retailer={link.retailer}
-            retailerLogo={retailerLogo} />
+            retailerLogo={retailerLogo}
+            itemPrice={link.price} />
         });
         return (
             listItems

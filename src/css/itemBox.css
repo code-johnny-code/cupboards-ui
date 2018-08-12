@@ -20,6 +20,7 @@
         font: 10px Arial, sans-serif;
     }
     .retailerBox {
+        width: auto;
         margin-top: auto;
     }
     .retailerLogo {
@@ -38,6 +39,9 @@
     .deleteButton {
         vertical-align: top;
         color: red;
+    }
+    .price {
+        font-size: 20pt;
     }
 }
 
