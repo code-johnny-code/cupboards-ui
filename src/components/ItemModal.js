@@ -11,7 +11,9 @@ class ItemModal extends Component {
           upc: '',
           scanning: false,
           blip: false,
-          itemName: 'test'
+          itemName: '',
+          itemImg: '',
+          price: ''
         }
     
         this._scan = this._scan.bind(this);
@@ -27,6 +29,15 @@ class ItemModal extends Component {
       }
     
     _onDetected(results) {
+        const upc = results.codeResult.code.toString();
+        const { REACT_APP_LOOKUP_URL } = process.env;
+        fetch(REACT_APP_LOOKUP_URL + upc)
+        .then(res => res.json())
+        .catch(error => alert(error))
+        .then(res => this.setState({
+            upc: upc,
+            itemName: res.items[0].title
+        }))
         this.setState({ 
             scanning: !this.state.scanning,
             upc: results.codeResult.code,
@@ -47,7 +58,7 @@ class ItemModal extends Component {
                 <p>{ this.state.upc }</p>
                 <label>
                     Name:
-                    <input type="text" value={this.state.itemName} onChange={this.handleNameChange} />
+                    <input type="text" placeholder={ 'Name' } value={ this.state.itemName } onChange={ this.handleNameChange } />
                 </label>
                 <button onClick={ () => {this.props.handleAddItem('test item')} } >Add item</button>
                 <button onClick={ this.props.handleCloseModal } >Cancel</button>
