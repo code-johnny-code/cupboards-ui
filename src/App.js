@@ -26,12 +26,10 @@ class App extends Component {
 
   handleOpenModal (action, item) {
     if (item) { this.setState({ activeItem: item }) };
-    console.log(action);
     this.setState({ showModal: true});
   }
 
   handleAddItem (item) {
-    console.log(item);
     this.setState({ showModal: false });
   }
   
