@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import ReactModal from 'react-modal';
 import Scanner from './Scanner';
 import Sound from 'react-sound';
+import fetch from 'node-fetch';
 
 class ItemModal extends Component {
     constructor(props) {
@@ -35,15 +36,15 @@ class ItemModal extends Component {
             blip: true
         });
         const upc = results.codeResult.code.toString();
-        const { REACT_APP_LOOKUP_URL } = process.env;
-        fetch(REACT_APP_LOOKUP_URL + upc)
+        const { REACT_APP_LOOKUP_URL, REACT_APP_LOOKUP_KEY } = process.env;
+        fetch(`${REACT_APP_LOOKUP_URL}/${REACT_APP_LOOKUP_KEY}/${upc}`)
         .then(res => res.json())
         .catch(error => error)
         .then(res => this.setState({
             upc: upc,
-            itemName: res.items[0].title,
-            price: res.items[0].offers[0].price,
-            itemImg: res.items[0].images[0]
+            itemName: res.items[0].name,
+            price: `$${res.items[0].salePrice.toFixed(2)}`,
+            itemImg: res.items[0].thumbnailImage
         }))
     }
 

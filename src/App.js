@@ -41,12 +41,8 @@ class App extends Component {
     const { REACT_APP_LIST_URL } = process.env;
     const fetch = require('node-fetch');
     fetch(REACT_APP_LIST_URL)
-    .then(res => {
-      return res.json()
-    })
-    .then(res =>{
-      this.setState({ items: res })
-    })
+    .then(res => res.json())
+    .then(res => this.setState({ items: res }))
   }
 
   render() {
