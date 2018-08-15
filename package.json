@@ -3,9 +3,14 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "core-js": "^2.5.7",
+    "quagga": "^0.12.1",
     "react": "^16.4.2",
     "react-dom": "^16.4.2",
-    "react-scripts": "1.1.4"
+    "react-modal": "^3.5.1",
+    "react-scripts": "1.1.4",
+    "react-select": "^2.0.0",
+    "react-sound": "^1.2.0"
   },
   "scripts": {
     "start": "react-scripts start",
