@@ -17,7 +17,6 @@ class App extends Component {
 
     this.handleOpenModal = this.handleOpenModal.bind(this);
     this.handleCloseModal = this.handleCloseModal.bind(this);    
-    this.handleAddItem = this.handleAddItem.bind(this);
   }
 
   componentWillMount() {
@@ -29,12 +28,9 @@ class App extends Component {
     this.setState({ showModal: true});
   }
 
-  handleAddItem (item) {
-    this.setState({ showModal: false });
-  }
-  
   handleCloseModal () {
     this.setState({ showModal: false });
+    this.retrieveItems();
   }
 
   retrieveItems() {
@@ -48,7 +44,7 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <ItemModal handleCloseModal={ this.handleCloseModal } showModal={ this.state.showModal } handleAddItem={ this.handleAddItem }/>
+        <ItemModal handleCloseModal={ this.handleCloseModal } showModal={ this.state.showModal } />
         <header className="App-header">
           <button onClick={ () => this.handleOpenModal('add') }>Add</button>
           <img src={logo} className="App-logo" alt="logo" />

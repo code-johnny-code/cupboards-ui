@@ -13,20 +13,30 @@ class ItemModal extends Component {
           upc: '',
           scanning: false,
           blip: false,
-          itemName: '',
-          itemImg: '',
+          name: '',
+          img_url: '',
           price: '',
           quantity: 1,
           expiration: '',
           location: 'upstairs',
           retailer: '',
-          category: ''
+          category: '',
+          minimum: 0
         }
     
         this._scan = this._scan.bind(this);
         this._onDetected = this._onDetected.bind(this);
         this._handleChange = this._handleChange.bind(this);
         this._handleAddItem = this._handleAddItem.bind(this);
+    }
+
+    componentWillMount() {
+        ReactModal.setAppElement('body');
+        console.log('modal mounted');
+    }
+
+    _setInitialState() {
+        
     }
 
     _scan() {
@@ -43,42 +53,77 @@ class ItemModal extends Component {
             blip: true
         });
         const upc = results.codeResult.code.toString();
-        //TODO Check for and retrieve data (name, image, retailer, category) for item if upc exists in cupboards database
+        //TODO Check for and retrieve data (name, image, retailer, category, minimum) for item if upc exists in cupboards database
         const { REACT_APP_LOOKUP_URL, REACT_APP_LOOKUP_KEY } = process.env;
         fetch(`${REACT_APP_LOOKUP_URL}/${REACT_APP_LOOKUP_KEY}/${upc}`)
         .then(res => res.json())
         .catch(error => error)
         .then(res => this.setState({
             upc: upc,
-            itemName: res.items[0].name,
+            name: res.items[0].name,
             price: `$${res.items[0].salePrice.toFixed(2)}`,
-            itemImg: res.items[0].thumbnailImage
+            img_url: res.items[0].thumbnailImage
         }))
     }
 
-    _handleChange(event, type) {
-        switch (type) {
-            case 'itemName':
-                this.setState({itemName: event.value})
+    _handleChange(event) {
+        const source = event.id || event.target.id;
+        switch (source) {
+            case 'name':
+                this.setState({name: event.target.value})
+                break;
             case 'price':
-                this.setState({price: event.value})
+                this.setState({price: event.target.value})
+                break;
             case 'quantity':
-                this.setState({quantity: event.value})
+                this.setState({quantity: event.target.value})
+                break;
+            case 'minimum':
+                this.setState({minimum: event.target.value})
+                break;
             case 'expiration':
-                this.setState({expiration: event.value})
+                this.setState({expiration: event.target.value})
+                break;
             case 'location':
-                this.setState({location: event})
+                this.setState({location: event.value})
+                break;
             case 'retailer':
-                this.setState({retailer: event})
+                this.setState({retailer: event.value})
+                break;
             case 'category':
-                this.setState({category: event})
-            
+                this.setState({category: event.value})
+                break;
         }
       }
 
       _handleAddItem () {
-          //TODO: Send item info to /add endpoint to create new item. Check that list refreshes with new item.
-        this.setState({ showModal: false });
+          const { REACT_APP_ADD_URL } = process.env;
+          const data = { ...this.state };
+          fetch(REACT_APP_ADD_URL, {
+              method: 'POST',
+              headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify(data)
+          }).then(() => {
+            this.props.handleCloseModal();
+            //TODO: Find better way of resetting state after each item addition
+            this.setState({
+                upc: '',
+                scanning: false,
+                blip: false,
+                name: '',
+                img_url: '',
+                price: '',
+                quantity: 1,
+                expiration: '',
+                location: 'upstairs',
+                retailer: '',
+                category: '',
+                minimum: 0
+              });
+          })
       }
 
     render() {
@@ -88,59 +133,65 @@ class ItemModal extends Component {
                 {this.state.blip ? <Sound url="blip.mp3" playStatus={ Sound.status.PLAYING } /> : null}
                 <button><img src="scan.png" alt="Scan button" onClick={ this._scan } /></button>
                 <p>{ this.state.upc }</p>
-                { this.state.itemImg ? <img src={ this.state.itemImg } alt={ this.state.itemName } /> : null }
+                { this.state.img_url ? <img src={ this.state.img_url } alt={ this.state.name } /> : null }
                 <div>
                     <label>
                         Name:
-                        <input type="text" placeholder={ 'Name' } value={ this.state.itemName } onChange={ (newName) => this._handleChange(newName, 'itemName') } />
+                        <input type="text" id='name' placeholder={ 'Name' } value={ this.state.name } onChange={ this._handleChange } />
                     </label>
                 </div>
                 <div>
                     <label>
                         Price:
-                        <input type="text" placeholder={ 'Price' } value={ this.state.price } onChange={ (newPrice) => this._handleChange(newPrice, 'price') } />
+                        <input type="text" id='price' placeholder={ 'Price' } value={ this.state.price } onChange={ this._handleChange } />
                     </label>
                 </div>
                 <div>
                     <label>
                         Quantity:
-                        <input type="number" value={ this.state.quantity } onChange={ (newQuantity) => this._handleChange(newQuantity, 'quantity') } />
+                        <input type="number" id='quantity' value={ this.state.quantity } onChange={ this._handleChange } />
+                    </label>
+                </div>
+                <div>
+                    <label>
+                        Mininum on-hand Quantity:
+                        <input type="number" id='minimum' value={ this.state.minimum } onChange={ this._handleChange } />
                     </label>
                 </div>
                 <div>
                     <label>
                         Expiration:
-                        <input type="text" value={ this.state.expiration } onChange={ (newExpiration) => this._handleChange(newExpiration, 'expiration') } />
+                        <input type="text" id='expiration' value={ this.state.expiration } onChange={ this._handleChange } />
                     </label>
                 </div>
                 <div>
                     <label>
                         Location:
                         <Select options={[
-                            { value: 'upstairs', label: 'Upstairs' },
-                            { value: 'downstairs', label: 'Downstairs' },
-                            { value: 'deepFreeze', label: 'Deep Freeze' }
-                        ]} isSearchable={false} onChange={ (locationValue) => this._handleChange(locationValue, 'location') }/>
+                            { id:'location', value: 'upstairs', label: 'Upstairs' },
+                            { id:'location', value: 'downstairs', label: 'Downstairs' },
+                            { id:'location', value: 'deepFreeze', label: 'Deep Freeze' }
+                        ]} isSearchable={false} onChange={ this._handleChange }/>
                     </label>
                 </div>
                 <div>
                     <label>
                         Preferred Retailer:
                         <Select options={[
-                            { value: 'target', label: 'Target' },
-                            { value: 'walmart', label: 'Walmart' },
-                            { value: 'aldi', label: 'Aldi' },
-                            { value: 'costco', label: 'Costco' },
-                        ]} isSearchable={false} onChange={ (retailerValue) => this._handleChange(retailerValue, 'retailer') }/>
+                            { id:'retailer', value: 'target', label: 'Target' },
+                            { id:'retailer', value: 'walmart', label: 'Walmart' },
+                            { id:'retailer', value: 'aldi', label: 'Aldi' },
+                            { id:'retailer', value: 'costco', label: 'Costco' },
+                        ]} isSearchable={false} onChange={ this._handleChange }/>
                     </label>
                 </div>
                 <div>
                     <label>
                         Category:
                         <Select options={[
-                            { value: 'groceries', label: 'Groceries' },
-                            { value: 'supplies', label: 'House supplies' }
-                        ]} isSearchable={false} onChange={ (categoryValue) => this._handleChange(categoryValue, 'category') }/>
+                            { id:'category', value: 'groceries', label: 'Groceries' },
+                            { id:'category', value: 'supplies', label: 'House supplies' }
+                        ]} isSearchable={false} onChange={ this._handleChange }/>
                     </label>
                 </div>
                 <button onClick={ this._handleAddItem } >Add item</button>
