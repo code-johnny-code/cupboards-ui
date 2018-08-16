@@ -23,12 +23,13 @@ class App extends Component {
     this.retrieveItems();
   }
 
-  handleOpenModal (action, item) {
+  handleOpenModal (item) {
     if (item) { this.setState({ activeItem: item }) };
     this.setState({ showModal: true});
   }
 
   handleCloseModal () {
+    this.setState({activeItem: {}})
     this.setState({ showModal: false });
     this.retrieveItems();
   }
@@ -44,9 +45,9 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <ItemModal handleCloseModal={ this.handleCloseModal } showModal={ this.state.showModal } />
+        { this.state.showModal ? <ItemModal handleCloseModal={ this.handleCloseModal } showModal={ this.state.showModal } activeItem={ this.state.activeItem } /> : null}
         <header className="App-header">
-          <button onClick={ () => this.handleOpenModal('add') }>Add</button>
+          <button onClick={ () => this.handleOpenModal() }>Add</button>
           <img src={logo} className="App-logo" alt="logo" />
           <button>Use</button>
           <h1 className="App-title">Welcome to Cupboards</h1>

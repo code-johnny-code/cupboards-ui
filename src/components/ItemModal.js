@@ -21,7 +21,8 @@ class ItemModal extends Component {
           location: 'upstairs',
           retailer: '',
           category: '',
-          minimum: 0
+          minimum: 0,
+          activeItemKey: ''
         }
     
         this._scan = this._scan.bind(this);
@@ -32,11 +33,21 @@ class ItemModal extends Component {
 
     componentWillMount() {
         ReactModal.setAppElement('body');
-        console.log('modal mounted');
-    }
-
-    _setInitialState() {
-        
+        if (this.props.activeItem) {
+            this.setState({
+                upc: this.props.activeItem.upc,
+                img_url: this.props.activeItem.img_url,
+                name: this.props.activeItem.name,
+                price: this.props.activeItem.price,
+                quantity: this.props.activeItem.quantity,
+                minimum: this.props.activeItem.minimum,
+                expiration: this.props.activeItem.expiration,
+                location: this.props.activeItem.location,
+                retailer: this.props.activeItem.retailer,
+                category: this.props.activeItem.category,
+                activeItemKey: this.props.activeItem.itemKey
+            })
+        }
     }
 
     _scan() {
@@ -133,6 +144,7 @@ class ItemModal extends Component {
                 {this.state.blip ? <Sound url="blip.mp3" playStatus={ Sound.status.PLAYING } /> : null}
                 <button><img src="scan.png" alt="Scan button" onClick={ this._scan } /></button>
                 <p>{ this.state.upc }</p>
+                <p>{ this.state.activeItemKey }</p>
                 { this.state.img_url ? <img src={ this.state.img_url } alt={ this.state.name } /> : null }
                 <div>
                     <label>

@@ -18,8 +18,11 @@ class Items extends Component {
                     retailerLogo = 'https://upload.wikimedia.org/wikipedia/commons/5/5a/Antu_amarok_cart_view.svg'
             }
             return <ItemBox 
-            key={link._id} 
+            key={link._id}
+            itemKey={link._id} 
             handleOpenModal={ this.props.handleOpenModal }
+            upc={link.upc}
+            minimum={link.minimum}
             img_url={link.img_url} 
             name={link.name} 
             quantity={link.quantity}
