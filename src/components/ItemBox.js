@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import '../css/itemBox.css';
+import DatePicker from 'react-datepicker';
+import moment from 'moment';
 
 class ItemBox extends Component {
     render() {
@@ -20,8 +22,8 @@ class ItemBox extends Component {
                 })}>
                 <div className={ 'numberLoc' }>
                     <p className={ 'quantity' }>{ this.props.quantity }</p>
-                    <p className={ 'exp' }>{ this.props.expiration }</p>
-                    <p className={ 'location' }>{ this.props.location.value }</p>
+                    <DatePicker disabled={true} selected={ moment(this.props.expiration) }/>
+                    <p className={ 'location' }>{ this.props.location.label }</p>
                 </div>
                 <img className={ 'itemImg' } src={this.props.img_url || 'placeholder.png'} alt={this.props.name}/>
                 <div>

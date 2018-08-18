@@ -4,6 +4,9 @@ import Scanner from './Scanner';
 import Sound from 'react-sound';
 import fetch from 'node-fetch';
 import Select from 'react-select'
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+import moment from 'moment';
 
 class ItemModal extends Component {
     constructor(props) {
@@ -18,7 +21,7 @@ class ItemModal extends Component {
             img_url: '',
             price: '',
             quantity: 1,
-            expiration: '',
+            expiration: moment(),
             location: {},
             retailer: {},
             category: {},
@@ -31,6 +34,7 @@ class ItemModal extends Component {
         this._handleChange = this._handleChange.bind(this);
         this._handleAddItem = this._handleAddItem.bind(this);
         this._handleBlipEnd = this._handleBlipEnd.bind(this);
+        this._handleExpiryChange = this._handleExpiryChange.bind(this);
     }
 
     componentWillMount() {
@@ -67,8 +71,14 @@ class ItemModal extends Component {
         }))
     }
 
+    _handleExpiryChange(date) {
+        this.setState({
+            expiration: date
+        });
+    }
+
     _handleChange(event) {
-        const source = event.id || event.target.id;
+        const source = (event.id || event.target.id || 'datepicker');
         let value;
         if (source === 'location' || source === 'retailer' || source === 'category') {
             value = event;
@@ -94,8 +104,7 @@ class ItemModal extends Component {
               },
               body: JSON.stringify(data)
           }).then(() => {
-            //TODO: Find better way of resetting state after each item addition
-            this._resetState();
+            // this._resetState();
             this.props.handleCloseModal();
           })
       }
@@ -128,7 +137,7 @@ class ItemModal extends Component {
               },
               body: JSON.stringify({ item_Id })
           }).then(() => {
-              this._resetState()
+            //   this._resetState()
               this.props.handleCloseModal();
           })
       }
@@ -169,8 +178,8 @@ class ItemModal extends Component {
                 <div>
                     <label>
                         Expiration:
-                        <input type="text" id='expiration' value={ this.state.expiration } onChange={ this._handleChange } />
                     </label>
+                    <DatePicker shouldCloseOnSelect={true} selected={ moment(this.state.expiration) } onChange={ this._handleExpiryChange }/>
                 </div>
                 <div>
                     <label>
