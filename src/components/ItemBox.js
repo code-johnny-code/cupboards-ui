@@ -15,20 +15,21 @@ class ItemBox extends Component {
                 category: this.props.category,
                 upc: this.props.upc,
                 img_url: this.props.img_url,
-                itemKey: this.props.itemKey
+                item_Id: this.props.item_Id,
+                category: this.props.category
                 })}>
                 <div className={ 'numberLoc' }>
                     <p className={ 'quantity' }>{ this.props.quantity }</p>
                     <p className={ 'exp' }>{ this.props.expiration }</p>
-                    <p className={ 'location' }>{ this.props.location }</p>
+                    <p className={ 'location' }>{ this.props.location.value }</p>
                 </div>
-                <img className={ 'itemImg' } src={this.props.img_url} alt={this.props.name}/>
+                <img className={ 'itemImg' } src={this.props.img_url || 'placeholder.png'} alt={this.props.name}/>
                 <div>
                     <p>{ this.props.name }</p>
                     <p className={ 'price' }>{ this.props.itemPrice } </p>
                 </div>
                 <div className={ 'retailerBox' }>
-                    <img className={ 'retailerLogo' } src={this.props.retailerLogo} alt={this.props.retailer} /> 
+                    <img className={ 'retailerLogo' } src={this.props.retailerLogo} alt={this.props.retailer.value} /> 
                 </div>
             </div>
         );

@@ -10,43 +10,33 @@ class ItemModal extends Component {
         super(props)
     
         this.state = {
-          upc: '',
-          scanning: false,
-          blip: false,
-          name: '',
-          img_url: '',
-          price: '',
-          quantity: 1,
-          expiration: '',
-          location: 'upstairs',
-          retailer: '',
-          category: '',
-          minimum: 0,
-          activeItemKey: ''
+            item_Id: '',
+            upc: '',
+            scanning: false,
+            blip: false,
+            name: '',
+            img_url: '',
+            price: '',
+            quantity: 1,
+            expiration: '',
+            location: {},
+            retailer: {},
+            category: {},
+            minimum: 0,
+            activeItemKey: ''
         }
     
         this._scan = this._scan.bind(this);
         this._onDetected = this._onDetected.bind(this);
         this._handleChange = this._handleChange.bind(this);
         this._handleAddItem = this._handleAddItem.bind(this);
+        this._handleBlipEnd = this._handleBlipEnd.bind(this);
     }
 
     componentWillMount() {
         ReactModal.setAppElement('body');
-        if (this.props.activeItem) {
-            this.setState({
-                upc: this.props.activeItem.upc,
-                img_url: this.props.activeItem.img_url,
-                name: this.props.activeItem.name,
-                price: this.props.activeItem.price,
-                quantity: this.props.activeItem.quantity,
-                minimum: this.props.activeItem.minimum,
-                expiration: this.props.activeItem.expiration,
-                location: this.props.activeItem.location,
-                retailer: this.props.activeItem.retailer,
-                category: this.props.activeItem.category,
-                activeItemKey: this.props.activeItem.itemKey
-            })
+        if (Object.keys(this.props.activeItem).length > 0) {
+            this.setState({...this.props.activeItem});
         }
     }
 
@@ -79,32 +69,18 @@ class ItemModal extends Component {
 
     _handleChange(event) {
         const source = event.id || event.target.id;
-        switch (source) {
-            case 'name':
-                this.setState({name: event.target.value})
-                break;
-            case 'price':
-                this.setState({price: event.target.value})
-                break;
-            case 'quantity':
-                this.setState({quantity: event.target.value})
-                break;
-            case 'minimum':
-                this.setState({minimum: event.target.value})
-                break;
-            case 'expiration':
-                this.setState({expiration: event.target.value})
-                break;
-            case 'location':
-                this.setState({location: event.value})
-                break;
-            case 'retailer':
-                this.setState({retailer: event.value})
-                break;
-            case 'category':
-                this.setState({category: event.value})
-                break;
+        let value;
+        if (source === 'location' || source === 'retailer' || source === 'category') {
+            value = event;
         }
+        else {
+            value = event.value || event.target.value || '';
+        }
+        this.setState({[source]: value});
+      }
+
+      _handleBlipEnd() {
+          this.setState({blip: false})
       }
 
       _handleAddItem () {
@@ -118,22 +94,42 @@ class ItemModal extends Component {
               },
               body: JSON.stringify(data)
           }).then(() => {
-            this.props.handleCloseModal();
             //TODO: Find better way of resetting state after each item addition
-            this.setState({
-                upc: '',
-                scanning: false,
-                blip: false,
-                name: '',
-                img_url: '',
-                price: '',
-                quantity: 1,
-                expiration: '',
-                location: 'upstairs',
-                retailer: '',
-                category: '',
-                minimum: 0
-              });
+            this._resetState();
+            this.props.handleCloseModal();
+          })
+      }
+
+      _resetState() {
+        this.setState({
+            upc: '',
+            scanning: false,
+            blip: false,
+            name: '',
+            img_url: '',
+            price: '',
+            quantity: 1,
+            expiration: '',
+            location: {},
+            retailer: {},
+            category: {},
+            minimum: 0,
+            activeItemKey: ''
+          });
+      }
+
+      _handleDelete(item_Id) {
+          const { REACT_APP_DELETE_URL } = process.env;
+          fetch(REACT_APP_DELETE_URL, {
+              method: 'POST',
+              headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({ item_Id })
+          }).then(() => {
+              this._resetState()
+              this.props.handleCloseModal();
           })
       }
 
@@ -141,7 +137,7 @@ class ItemModal extends Component {
         return (
             <ReactModal isOpen={ this.props.showModal }>
                 {this.state.scanning ? <Scanner onDetected={this._onDetected} /> : null}
-                {this.state.blip ? <Sound url="blip.mp3" playStatus={ Sound.status.PLAYING } /> : null}
+                {this.state.blip ? <Sound url="blip.mp3" playStatus={ Sound.status.PLAYING } onFinishedPlaying={ this._handleBlipEnd } /> : null}
                 <button><img src="scan.png" alt="Scan button" onClick={ this._scan } /></button>
                 <p>{ this.state.upc }</p>
                 <p>{ this.state.activeItemKey }</p>
@@ -183,7 +179,7 @@ class ItemModal extends Component {
                             { id:'location', value: 'upstairs', label: 'Upstairs' },
                             { id:'location', value: 'downstairs', label: 'Downstairs' },
                             { id:'location', value: 'deepFreeze', label: 'Deep Freeze' }
-                        ]} isSearchable={false} onChange={ this._handleChange }/>
+                        ]} value={this.state.location} isSearchable={false} onChange={ this._handleChange }/>
                     </label>
                 </div>
                 <div>
@@ -194,7 +190,7 @@ class ItemModal extends Component {
                             { id:'retailer', value: 'walmart', label: 'Walmart' },
                             { id:'retailer', value: 'aldi', label: 'Aldi' },
                             { id:'retailer', value: 'costco', label: 'Costco' },
-                        ]} isSearchable={false} onChange={ this._handleChange }/>
+                        ]} value={this.state.retailer} isSearchable={false} onChange={ this._handleChange }/>
                     </label>
                 </div>
                 <div>
@@ -203,11 +199,12 @@ class ItemModal extends Component {
                         <Select options={[
                             { id:'category', value: 'groceries', label: 'Groceries' },
                             { id:'category', value: 'supplies', label: 'House supplies' }
-                        ]} isSearchable={false} onChange={ this._handleChange }/>
+                        ]} value={this.state.category} isSearchable={false} onChange={ this._handleChange }/>
                     </label>
                 </div>
-                <button onClick={ this._handleAddItem } >Add item</button>
+                <button disabled={ !this.state.name } onClick={ this._handleAddItem } >{ this.state.item_Id ? 'Save changes' : 'Add item' }</button>
                 <button onClick={ this.props.handleCloseModal } >Cancel</button>
+                { this.state.item_Id ? <button onClick={ () => this._handleDelete(this.state.item_Id) }>Delete</button> : null }
             </ReactModal>
         );
     }

@@ -7,19 +7,25 @@ class Items extends Component {
     render() {
         const listItems = this.props.items.map((link) => {
             let retailerLogo = '';
-            switch(link.retailer) {
-                case 'Target':
-                    retailerLogo = 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Target_logo.svg/100px-Target_logo.svg.png';
+            switch(link.retailer.value) {
+                case 'target':
+                    retailerLogo = 'logo_target.png';
                     break;
-                case 'Walmart':
-                    retailerLogo = 'http://thenewsafrica.com/wp-content/uploads/2018/07/walmart-logo-free-transparent-png-logos-walmart-logo-png-design-logo.jpg';
+                case 'walmart':
+                    retailerLogo = 'logo_walmart.png';
+                    break;
+                case 'aldi':
+                    retailerLogo = 'logo_aldi.png';
+                    break;
+                case 'costco':
+                    retailerLogo = 'logo_costco.png';
                     break;
                 default:
                     retailerLogo = 'https://upload.wikimedia.org/wikipedia/commons/5/5a/Antu_amarok_cart_view.svg'
             }
             return <ItemBox 
             key={link._id}
-            itemKey={link._id} 
+            item_Id={link._id} 
             handleOpenModal={ this.props.handleOpenModal }
             upc={link.upc}
             minimum={link.minimum}
@@ -30,7 +36,8 @@ class Items extends Component {
             expiration={link.expiration}
             retailer={link.retailer}
             retailerLogo={retailerLogo}
-            itemPrice={link.price} />
+            itemPrice={link.price} 
+            category={link.category} />
         });
         return (
             listItems
