@@ -26,7 +26,8 @@ class ItemModal extends Component {
             retailer: {},
             category: {},
             minimum: 0,
-            activeItemKey: ''
+            activeItemKey: '',
+            bestBy: false
         }
     
         this._scan = this._scan.bind(this);
@@ -78,14 +79,20 @@ class ItemModal extends Component {
     }
 
     _handleChange(event) {
-        const source = (event.id || event.target.id || 'datepicker');
+        let source = (event.id || event.target.id || 'datepicker');
         let value;
         if (source === 'location' || source === 'retailer' || source === 'category') {
             value = event;
         }
+        else if (event.target.type === 'checkbox'){
+            source = 'bestBy';
+            value = !this.state.bestBy;
+        }
         else {
             value = event.value || event.target.value || '';
         }
+        console.log(event.target.type);
+        console.log(value);
         this.setState({[source]: value});
       }
 
@@ -179,7 +186,15 @@ class ItemModal extends Component {
                     <label>
                         Expiration:
                     </label>
-                    <DatePicker shouldCloseOnSelect={true} selected={ moment(this.state.expiration) } onChange={ this._handleExpiryChange }/>
+                    <DatePicker disabledKeyboardNavigation shouldCloseOnSelect={true} selected={ moment(this.state.expiration) } onChange={ this._handleExpiryChange }/>
+                    <label>
+                        Best By 
+                        <input
+                            name="bestBy"
+                            type="checkbox"
+                            checked={this.state.bestBy}
+                            onChange={this._handleChange} />
+                    </label>
                 </div>
                 <div>
                     <label>

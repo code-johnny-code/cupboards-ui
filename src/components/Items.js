@@ -5,7 +5,9 @@ import 'core-js/es6/map';
 class Items extends Component {
     
     render() {
-        const listItems = this.props.items.map((link) => {
+        const listItems = this.props.items.sort(function (a, b) {
+            return new Date(a.expiration) - new Date(b.expiration);
+          }).map((link) => {
             let retailerLogo = '';
             switch(link.retailer.value) {
                 case 'target':
@@ -37,7 +39,8 @@ class Items extends Component {
             retailer={link.retailer}
             retailerLogo={retailerLogo}
             itemPrice={link.price} 
-            category={link.category} />
+            category={link.category} 
+            bestBy={link.bestBy}/>
         });
         return (
             listItems
