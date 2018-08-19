@@ -48,6 +48,11 @@ export default class Scanner extends Component {
     }
 
     render() {
-        return <div id="interactive" className="viewport" />;
+        return (
+            <div>
+                <div id="interactive" className="viewport" />
+                <button onClick={this._onDetected}>CANCEL</button>
+            </div>
+    )
     }
 }
