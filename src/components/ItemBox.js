@@ -23,7 +23,7 @@ class ItemBox extends Component {
                 <div className={ 'numberLoc' }>
                     <p className={ 'quantity' }>{ this.props.quantity }</p>
                     { this.props.bestBy ? <p className={ 'bestBy' }>Best by</p> : <p className={ 'bestBy' }>Use by</p> }
-                    <DatePicker disabled={true} selected={ moment(this.props.expiration) }/>
+                    <DatePicker className={'datepicker'} disabled={true} selected={ moment(this.props.expiration) }/>
                     <p className={ 'location' }>{ this.props.location.label }</p>
                 </div>
                 <img className={ 'itemImg' } src={this.props.img_url || 'placeholder.png'} alt={this.props.name}/>

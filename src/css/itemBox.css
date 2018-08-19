@@ -1,94 +1,55 @@
+.container {
+    width: 25em;
+    margin: .5em;
+    display: flex;
+    border: 1px solid black;
+} 
+.quantity {
+    width: 2em;
+    background: #fff;
+    border: 2px solid #666;
+    color: #666;
+    text-align: center;
+    font: 32px Arial, sans-serif;
+    margin-bottom: auto;
+    margin-top: auto;
+}
+.location {
+    margin-top: auto;
+    font: 10px Arial, sans-serif;
+}
+.retailerBox {
+    margin-top: auto;
+}
+.retailerLogo {
+    padding: .5em;
+    height: 2em;
+    vertical-align: bottom;
+}
+img {
+    margin: auto;
+    height: 6em;
+    padding: 5px;
+}
+.numberLoc {
+    padding: .5em;
+}
+.deleteButton {
+    vertical-align: top;
+    color: red;
+}
+.bestBy {
+    font: 10px Arial, sans-serif;
+}
+.datepicker {
+    width: 6em;
+    text-align: center
+}
 @media (max-width: 600px) {
     .container {
-        display: flex;
-        border: 1px solid black;
-    } 
-    .quantity {
-        border-radius: 50%;
-        width: 36px;
-        height: 36px;
-        padding: 8px;
-        background: #fff;
-        border: 2px solid #666;
-        color: #666;
-        text-align: center;
-        font: 32px Arial, sans-serif;
-        margin: auto;
-    }
-    .location {
-        margin-top: auto;
-        font: 10px Arial, sans-serif;
-    }
-    .retailerBox {
-        width: auto;
-        margin-top: auto;
-    }
-    .retailerLogo {
-        height: 30px;
-        vertical-align: bottom;
-    }
-    img {
-        margin: auto;
-        height: 6em;
-        padding: 5px;
-    }
-    .numberLoc {
-        padding: .5em;
-    }
-    .deleteButton {
-        vertical-align: top;
-        color: red;
-    }
-    .price {
-        font-size: 20pt;
-    }
-    .bestBy {
-        font: 10px Arial, sans-serif;
-    }
-}
-
-@media (min-width: 601px) {
-    .container {
-        display: flex;
-        border: 1px solid black;
-    } 
-    .quantity {
-        border-radius: 50%;
-        width: 36px;
-        height: 36px;
-        padding: 8px;
-        background: #fff;
-        border: 2px solid #666;
-        color: #666;
-        text-align: center;
-        font: 32px Arial, sans-serif;
-        margin: auto;
-    }
-    .location {
-        margin-top: auto;
-        font: 10px Arial, sans-serif;
-    }
-    .retailerBox {
-        margin-top: auto;
-    }
-    .retailerLogo {
-        padding: .5em;
-        height: 2em;
-        vertical-align: bottom;
-    }
-    img {
-        margin: auto;
-        height: 6em;
-        padding: 5px;
-    }
-    .numberLoc {
-        padding: .5em;
-    }
-    .deleteButton {
-        vertical-align: top;
-        color: red;
-    }
-    .bestBy {
-        font: 10px Arial, sans-serif;
+        margin-top: 0.5em;
+        margin-bottom: 0.5em;
+        margin-left: auto;
+        margin-right: auto;
     }
 }

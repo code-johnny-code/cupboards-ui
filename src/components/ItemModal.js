@@ -91,8 +91,6 @@ class ItemModal extends Component {
         else {
             value = event.value || event.target.value || '';
         }
-        console.log(event.target.type);
-        console.log(value);
         this.setState({[source]: value});
       }
 
@@ -111,7 +109,6 @@ class ItemModal extends Component {
               },
               body: JSON.stringify(data)
           }).then(() => {
-            // this._resetState();
             this.props.handleCloseModal();
           })
       }
@@ -144,7 +141,6 @@ class ItemModal extends Component {
               },
               body: JSON.stringify({ item_Id })
           }).then(() => {
-            //   this._resetState()
               this.props.handleCloseModal();
           })
       }

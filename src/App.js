@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
-import './App.css';
+import './css/App.css';
 import Items from './components/Items';
 import ItemModal from './components//ItemModal';
 
@@ -52,7 +52,9 @@ class App extends Component {
           <button>Use</button>
           <h1 className="App-title">Welcome to Cupboards</h1>
         </header>
-        <Items items={ this.state.items } handleOpenModal={ this.handleOpenModal } />
+        <div className={ 'items' }>
+          <Items items={ this.state.items } handleOpenModal={ this.handleOpenModal } />
+        </div>
       </div>
     );
   }
