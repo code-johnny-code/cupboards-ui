@@ -4,8 +4,10 @@
   "private": true,
   "dependencies": {
     "core-js": "^2.5.7",
+    "moment": "^2.22.2",
     "quagga": "^0.12.1",
     "react": "^16.4.2",
+    "react-datepicker": "^1.6.0",
     "react-dom": "^16.4.2",
     "react-modal": "^3.5.1",
     "react-scripts": "1.1.4",
@@ -13,7 +15,7 @@
     "react-sound": "^1.2.0"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "HTTPS=true react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"

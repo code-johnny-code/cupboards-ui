@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
-import './App.css';
+import './css/App.css';
 import Items from './components/Items';
 import ItemModal from './components//ItemModal';
 
@@ -17,24 +17,21 @@ class App extends Component {
 
     this.handleOpenModal = this.handleOpenModal.bind(this);
     this.handleCloseModal = this.handleCloseModal.bind(this);    
-    this.handleAddItem = this.handleAddItem.bind(this);
   }
 
   componentWillMount() {
     this.retrieveItems();
   }
 
-  handleOpenModal (action, item) {
+  handleOpenModal (item) {
     if (item) { this.setState({ activeItem: item }) };
     this.setState({ showModal: true});
   }
 
-  handleAddItem (item) {
-    this.setState({ showModal: false });
-  }
-  
   handleCloseModal () {
+    this.setState({activeItem: {}})
     this.setState({ showModal: false });
+    this.retrieveItems();
   }
 
   retrieveItems() {
@@ -48,14 +45,16 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <ItemModal handleCloseModal={ this.handleCloseModal } showModal={ this.state.showModal } handleAddItem={ this.handleAddItem }/>
+        { this.state.showModal ? <ItemModal handleCloseModal={ this.handleCloseModal } showModal={ this.state.showModal } activeItem={ this.state.activeItem } /> : null}
         <header className="App-header">
-          <button onClick={ () => this.handleOpenModal('add') }>Add</button>
+          <button onClick={ () => this.handleOpenModal() }>Add</button>
           <img src={logo} className="App-logo" alt="logo" />
           <button>Use</button>
           <h1 className="App-title">Welcome to Cupboards</h1>
         </header>
-        <Items items={ this.state.items } handleOpenModal={ this.handleOpenModal } />
+        <div className={ 'items' }>
+          <Items items={ this.state.items } handleOpenModal={ this.handleOpenModal } />
+        </div>
       </div>
     );
   }
