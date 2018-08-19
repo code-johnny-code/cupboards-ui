@@ -26,12 +26,12 @@ class ItemBox extends Component {
                     <DatePicker className={'datepicker'} disabled={true} selected={ moment(this.props.expiration) }/>
                     <p className={ 'location' }>{ this.props.location.label }</p>
                 </div>
-                <img className={ 'itemImg' } src={this.props.img_url || 'placeholder.png'} alt={this.props.name}/>
-                <div>
+                <div className={ 'centerElements' }>
                     <p>{ this.props.name }</p>
-                    <p className={ 'price' }>{ this.props.itemPrice } </p>
+                    <img className={ 'itemImg' } src={this.props.img_url || 'placeholder.png'} alt={this.props.name}/>
                 </div>
                 <div className={ 'retailerBox' }>
+                    <p className={ 'price' }>{ this.props.itemPrice } </p>
                     <img className={ 'retailerLogo' } src={this.props.retailerLogo} alt={this.props.retailer.value} /> 
                 </div>
             </div>

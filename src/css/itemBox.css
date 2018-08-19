@@ -45,6 +45,9 @@ img {
     width: 6em;
     text-align: center
 }
+.centerElements {
+    margin: auto;
+}
 @media (max-width: 600px) {
     .container {
         margin-top: 0.5em;
