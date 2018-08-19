@@ -150,7 +150,7 @@ class ItemModal extends Component {
             <ReactModal isOpen={ this.props.showModal }>
                 {this.state.scanning ? <Scanner onDetected={this._onDetected} /> : null}
                 {this.state.blip ? <Sound url="blip.mp3" playStatus={ Sound.status.PLAYING } onFinishedPlaying={ this._handleBlipEnd } /> : null}
-                <button><img src="scan.png" alt="Scan button" onClick={ this._scan } /></button>
+                {!this.state.item_Id ? <button><img src="scan.png" alt="Scan button" onClick={ this._scan } /></button> : null}
                 <p>{ this.state.upc }</p>
                 <p>{ this.state.activeItemKey }</p>
                 { this.state.img_url ? <img src={ this.state.img_url } alt={ this.state.name } /> : null }
