@@ -46,11 +46,11 @@ In a terminal, run:
 Clone the Cupboards UI from this repo: https://github.com/code-johnny-code/cupboards-ui
 
 The API also requires a `.env` file in the root folder with the following values:
->REACT_APP_LIST_URL="https://localhost:4000/list"
-REACT_APP_LOOKUP_URL="https://localhost:4000/lookup"  
-REACT_APP_LOOKUP_KEY=
-REACT_APP_ADD_URL="https://localhost:4000/add"
-REACT_APP_DELETE_URL="https://localhost:4000/delete"
+>REACT_APP_LIST_URL="https://localhost:4000/list"  
+REACT_APP_LOOKUP_URL="https://localhost:4000/lookup"    
+REACT_APP_LOOKUP_KEY=  
+REACT_APP_ADD_URL="https://localhost:4000/add"  
+REACT_APP_DELETE_URL="https://localhost:4000/delete"  
 
 You should set the `REACT_APP_LOOKUP_KEY` to your [Walmart Open API key](https://developer.walmartlabs.com/). This is used for looking up product data via scanned UPCs.
 
