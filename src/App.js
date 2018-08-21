@@ -5,7 +5,10 @@ import Items from './components/Items';
 import ItemModal from './components/ItemModal';
 import Login from './components/Login'
 
+
 class App extends Component {
+
+
   constructor(props) {
     super(props)
 
@@ -20,10 +23,17 @@ class App extends Component {
     this.handleOpenModal = this.handleOpenModal.bind(this);
     this.handleCloseModal = this.handleCloseModal.bind(this);
     this.handleLogin = this.handleLogin.bind(this);
+    this.getCookie = this.getCookie.bind(this);
   }
 
   componentWillMount() {
+    this.setState({loggedIn: this.getCookie('loggedIn')})
     this.retrieveItems();
+  }
+
+  getCookie(cookiename) {
+  const cookiestring=RegExp(""+cookiename+"[^;]+").exec(document.cookie);
+  return decodeURIComponent(!!cookiestring ? cookiestring.toString().replace(/^[^=]+./,"") : "");
   }
 
   handleOpenModal (item) {
@@ -46,7 +56,8 @@ class App extends Component {
   }
 
   handleLogin() {
-    this.setState({loggedIn: true})
+    document.cookie = "loggedIn=true"
+    this.setState({loggedIn: true});
   }
 
   render() {

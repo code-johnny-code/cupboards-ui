@@ -48,6 +48,9 @@ img {
 .centerElements {
     margin: auto;
 }
+.onList {
+    height: 30px;
+}
 @media (max-width: 600px) {
     .container {
         margin-top: 0.5em;

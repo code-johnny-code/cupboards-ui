@@ -40,7 +40,8 @@ class Items extends Component {
             retailerLogo={retailerLogo}
             itemPrice={link.price} 
             category={link.category} 
-            bestBy={link.bestBy}/>
+            bestBy={link.bestBy}
+            onList={link.onList}/>
         });
         return (
             listItems

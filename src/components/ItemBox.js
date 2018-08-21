@@ -18,13 +18,15 @@ class ItemBox extends Component {
                 upc: this.props.upc,
                 img_url: this.props.img_url,
                 item_Id: this.props.item_Id,
-                category: this.props.category
+                category: this.props.category,
+                onList: this.props.onList
                 })}>
                 <div className={ 'numberLoc' }>
                     <p className={ 'quantity' }>{ this.props.quantity }</p>
                     { this.props.bestBy ? <p className={ 'bestBy' }>Best by</p> : <p className={ 'bestBy' }>Use by</p> }
                     <DatePicker className={'datepicker'} disabled={true} selected={ moment(this.props.expiration) }/>
                     <p className={ 'location' }>{ this.props.location.label }</p>
+                    <img className={ 'onList' } src={(this.props.onList) ? 'onListTrue.png'  : 'onListFalse.png'} onClick={this.handleOnListChange}/>
                 </div>
                 <div className={ 'centerElements' }>
                     <p>{ this.props.name }</p>

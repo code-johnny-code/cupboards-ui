@@ -27,7 +27,8 @@ class ItemModal extends Component {
             category: {},
             minimum: 0,
             activeItemKey: '',
-            bestBy: false
+            bestBy: false,
+            onList: false
         }
     
         this._scan = this._scan.bind(this);
@@ -36,6 +37,7 @@ class ItemModal extends Component {
         this._handleAddItem = this._handleAddItem.bind(this);
         this._handleBlipEnd = this._handleBlipEnd.bind(this);
         this._handleExpiryChange = this._handleExpiryChange.bind(this);
+        this._handleOnListChange = this._handleOnListChange.bind(this);
     }
 
     componentWillMount() {
@@ -80,6 +82,10 @@ class ItemModal extends Component {
         });
     }
 
+    _handleOnListChange() {
+        this.setState({onList: !this.state.onList});
+    }
+
     _handleChange(event) {
         let source = (event.id || event.target.id || 'datepicker');
         let value;
@@ -115,24 +121,6 @@ class ItemModal extends Component {
           })
       }
 
-      _resetState() {
-        this.setState({
-            upc: '',
-            scanning: false,
-            blip: false,
-            name: '',
-            img_url: '',
-            price: '',
-            quantity: 1,
-            expiration: '',
-            location: {},
-            retailer: {},
-            category: {},
-            minimum: 0,
-            activeItemKey: ''
-          });
-      }
-
       _handleDelete(item_Id) {
           const { REACT_APP_DELETE_URL } = process.env;
           fetch(REACT_APP_DELETE_URL, {
@@ -153,8 +141,9 @@ class ItemModal extends Component {
                 {this.state.scanning ? <Scanner onDetected={this._onDetected} /> : null}
                 {this.state.blip ? <Sound url="blip.mp3" playStatus={ Sound.status.PLAYING } onFinishedPlaying={ this._handleBlipEnd } /> : null}
                 {!this.state.item_Id ? <button><img src="scan.png" alt="Scan button" onClick={ this._scan } /></button> : null}
+
                 <p>{ this.state.upc }</p>
-                <p>{ this.state.activeItemKey }</p>
+                <img src={this.state.onList ? 'onListTrue.png' : 'onListFalse.png'} onClick={this._handleOnListChange}/>
                 { this.state.img_url ? <img src={ this.state.img_url } alt={ this.state.name } /> : null }
                 <div>
                     <label>
