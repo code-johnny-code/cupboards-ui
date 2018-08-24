@@ -11,7 +11,7 @@ import moment from 'moment';
 class ItemModal extends Component {
     constructor(props) {
         super(props)
-    
+
         this.state = {
             item_Id: '',
             upc: '',
@@ -27,7 +27,8 @@ class ItemModal extends Component {
             category: {},
             minimum: 0,
             activeItemKey: '',
-            bestBy: false
+            bestBy: false,
+            onList: false
         }
     
         this._scan = this._scan.bind(this);
@@ -36,6 +37,7 @@ class ItemModal extends Component {
         this._handleAddItem = this._handleAddItem.bind(this);
         this._handleBlipEnd = this._handleBlipEnd.bind(this);
         this._handleExpiryChange = this._handleExpiryChange.bind(this);
+        this._handleOnListChange = this._handleOnListChange.bind(this);
     }
 
     componentWillMount() {
@@ -53,29 +55,36 @@ class ItemModal extends Component {
       }
     
     _onDetected(results) {
-        this.setState({ 
-            scanning: !this.state.scanning,
-            upc: results.codeResult.code,
-            blip: true
-        });
-        const upc = results.codeResult.code.toString();
-        //TODO Check for and retrieve data (name, image, retailer, category, minimum) for item if upc exists in cupboards database
-        const { REACT_APP_LOOKUP_URL, REACT_APP_LOOKUP_KEY } = process.env;
-        fetch(`${REACT_APP_LOOKUP_URL}/${REACT_APP_LOOKUP_KEY}/${upc}`)
-        .then(res => res.json())
-        .catch(error => error)
-        .then(res => this.setState({
-            upc: upc,
-            name: res.items[0].name,
-            price: `$${res.items[0].salePrice.toFixed(2)}`,
-            img_url: res.items[0].thumbnailImage
-        }))
+        if (results.codeResult) {
+            this.setState({ 
+                scanning: false,
+                upc: results.codeResult.code,
+                blip: true
+            });
+            const upc = results.codeResult.code.toString();
+            //TODO Check for and retrieve data (name, image, retailer, category, minimum) for item if upc exists in cupboards database
+            const { REACT_APP_LOOKUP_URL, REACT_APP_LOOKUP_KEY } = process.env;
+            fetch(`${REACT_APP_LOOKUP_URL}/${REACT_APP_LOOKUP_KEY}/${upc}`)
+            .then(res => res.json())
+            .catch(error => error)
+            .then(res => this.setState({
+                upc: upc,
+                name: res.items[0].name,
+                price: `$${res.items[0].salePrice.toFixed(2)}`,
+                img_url: res.items[0].thumbnailImage
+            }))
+        }
+        this.setState({scanning: false})
     }
 
     _handleExpiryChange(date) {
         this.setState({
             expiration: date
         });
+    }
+
+    _handleOnListChange() {
+        this.setState({onList: !this.state.onList});
     }
 
     _handleChange(event) {
@@ -113,24 +122,6 @@ class ItemModal extends Component {
           })
       }
 
-      _resetState() {
-        this.setState({
-            upc: '',
-            scanning: false,
-            blip: false,
-            name: '',
-            img_url: '',
-            price: '',
-            quantity: 1,
-            expiration: '',
-            location: {},
-            retailer: {},
-            category: {},
-            minimum: 0,
-            activeItemKey: ''
-          });
-      }
-
       _handleDelete(item_Id) {
           const { REACT_APP_DELETE_URL } = process.env;
           fetch(REACT_APP_DELETE_URL, {
@@ -148,83 +139,86 @@ class ItemModal extends Component {
     render() {
         return (
             <ReactModal isOpen={ this.props.showModal }>
-                {this.state.scanning ? <Scanner onDetected={this._onDetected} /> : null}
                 {this.state.blip ? <Sound url="blip.mp3" playStatus={ Sound.status.PLAYING } onFinishedPlaying={ this._handleBlipEnd } /> : null}
-                {!this.state.item_Id ? <button><img src="scan.png" alt="Scan button" onClick={ this._scan } /></button> : null}
-                <p>{ this.state.upc }</p>
-                <p>{ this.state.activeItemKey }</p>
-                { this.state.img_url ? <img src={ this.state.img_url } alt={ this.state.name } /> : null }
+                {this.state.scanning ? <Scanner onDetected={this._onDetected} /> : 
                 <div>
-                    <label>
-                        Name:
-                        <input type="text" id='name' placeholder={ 'Name' } value={ this.state.name } onChange={ this._handleChange } />
-                    </label>
-                </div>
-                <div>
-                    <label>
-                        Price:
-                        <input type="text" id='price' placeholder={ 'Price' } value={ this.state.price } onChange={ this._handleChange } />
-                    </label>
-                </div>
-                <div>
-                    <label>
-                        Quantity:
-                        <input type="number" id='quantity' value={ this.state.quantity } onChange={ this._handleChange } />
-                    </label>
-                </div>
-                <div>
-                    <label>
-                        Mininum on-hand Quantity:
-                        <input type="number" id='minimum' value={ this.state.minimum } onChange={ this._handleChange } />
-                    </label>
-                </div>
-                <div>
-                    <label>
-                        Expiration:
-                    </label>
-                    <DatePicker disabledKeyboardNavigation shouldCloseOnSelect={true} selected={ moment(this.state.expiration) } onChange={ this._handleExpiryChange }/>
-                    <label>
-                        Best By 
-                        <input
-                            name="bestBy"
-                            type="checkbox"
-                            checked={this.state.bestBy}
-                            onChange={this._handleChange} />
-                    </label>
-                </div>
-                <div>
-                    <label>
-                        Location:
-                        <Select options={[
-                            { id:'location', value: 'upstairs', label: 'Upstairs' },
-                            { id:'location', value: 'downstairs', label: 'Downstairs' },
-                            { id:'location', value: 'deepFreeze', label: 'Deep Freeze' }
-                        ]} value={this.state.location} isSearchable={false} onChange={ this._handleChange }/>
-                    </label>
-                </div>
-                <div>
-                    <label>
-                        Preferred Retailer:
-                        <Select options={[
-                            { id:'retailer', value: 'target', label: 'Target' },
-                            { id:'retailer', value: 'walmart', label: 'Walmart' },
-                            { id:'retailer', value: 'aldi', label: 'Aldi' },
-                            { id:'retailer', value: 'costco', label: 'Costco' },
-                        ]} value={this.state.retailer} isSearchable={false} onChange={ this._handleChange }/>
-                    </label>
-                </div>
-                <div>
-                    <label>
-                        Category:
-                        <Select options={[
-                            { id:'category', value: 'groceries', label: 'Groceries' },
-                            { id:'category', value: 'supplies', label: 'House supplies' }
-                        ]} value={this.state.category} isSearchable={false} onChange={ this._handleChange }/>
-                    </label>
-                </div>
-                <button disabled={ !this.state.name } onClick={ this._handleAddItem } >{ this.state.item_Id ? 'Save changes' : 'Add item' }</button>
-                <button onClick={ this.props.handleCloseModal } >Cancel</button>
-                { this.state.item_Id ? <button onClick={ () => this._handleDelete(this.state.item_Id) }>Delete</button> : null }
+                    {!this.state.item_Id ? <button><img src="scan.png" alt="Scan button" onClick={ this._scan } /></button> : null}
+
+                    <p>{ this.state.upc }</p>
+                    <img src={this.state.onList ? 'onListTrue.png' : 'onListFalse.png'} onClick={this._handleOnListChange}/>
+                    { this.state.img_url ? <img src={ this.state.img_url } alt={ this.state.name } /> : null }
+                    <div>
+                        <label>
+                            Name:
+                            <input type="text" id='name' placeholder={ 'Name' } value={ this.state.name } onChange={ this._handleChange } />
+                        </label>
+                    </div>
+                    <div>
+                        <label>
+                            Price:
+                            <input type="text" id='price' placeholder={ 'Price' } value={ this.state.price } onChange={ this._handleChange } />
+                        </label>
+                    </div>
+                    <div>
+                        <label>
+                            Quantity:
+                            <input type="number" id='quantity' value={ this.state.quantity } onChange={ this._handleChange } />
+                        </label>
+                    </div>
+                    <div>
+                        <label>
+                            Mininum on-hand Quantity:
+                            <input type="number" id='minimum' value={ this.state.minimum } onChange={ this._handleChange } />
+                        </label>
+                    </div>
+                    <div>
+                        <label>
+                            Expiration:
+                        </label>
+                        <DatePicker disabledKeyboardNavigation shouldCloseOnSelect={true} selected={ moment(this.state.expiration) } onChange={ this._handleExpiryChange }/>
+                        <label>
+                            Best By 
+                            <input
+                                name="bestBy"
+                                type="checkbox"
+                                checked={this.state.bestBy}
+                                onChange={this._handleChange} />
+                        </label>
+                    </div>
+                    <div>
+                        <label>
+                            Location:
+                            <Select options={[
+                                { id:'location', value: 'upstairs', label: 'Upstairs' },
+                                { id:'location', value: 'downstairs', label: 'Downstairs' },
+                                { id:'location', value: 'deepFreeze', label: 'Deep Freeze' }
+                            ]} value={this.state.location} isSearchable={false} onChange={ this._handleChange }/>
+                        </label>
+                    </div>
+                    <div>
+                        <label>
+                            Preferred Retailer:
+                            <Select options={[
+                                { id:'retailer', value: 'target', label: 'Target' },
+                                { id:'retailer', value: 'walmart', label: 'Walmart' },
+                                { id:'retailer', value: 'aldi', label: 'Aldi' },
+                                { id:'retailer', value: 'costco', label: 'Costco' },
+                            ]} value={this.state.retailer} isSearchable={false} onChange={ this._handleChange }/>
+                        </label>
+                    </div>
+                    <div>
+                        <label>
+                            Category:
+                            <Select options={[
+                                { id:'category', value: 'groceries', label: 'Groceries' },
+                                { id:'category', value: 'supplies', label: 'House supplies' }
+                            ]} value={this.state.category} isSearchable={false} onChange={ this._handleChange }/>
+                        </label>
+                    </div>
+                    <button disabled={ !this.state.name } onClick={ this._handleAddItem } >{ this.state.item_Id ? 'Save changes' : 'Add item' }</button>
+                    <button onClick={ this.props.handleCloseModal } >Cancel</button>
+                    { this.state.item_Id ? <button onClick={ () => this._handleDelete(this.state.item_Id) }>Delete</button> : null }
+                </div>}
             </ReactModal>
         );
     }

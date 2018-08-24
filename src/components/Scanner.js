@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Quagga from 'quagga';
+import '../css/Scanner.css';
 
 export default class Scanner extends Component {
     constructor(props) {
@@ -13,7 +14,6 @@ export default class Scanner extends Component {
                 inputStream: {
                     type: 'LiveStream',
                     constraints: {
-                        width: 640,
                         height: 480,
                         facingMode: 'environment', // or user
                     },
@@ -48,6 +48,12 @@ export default class Scanner extends Component {
     }
 
     render() {
-        return <div id="interactive" className="viewport" />;
+        return (
+            <div className={ 'scanner' }>
+                <button onClick={this._onDetected}>CANCEL</button>
+                <div id="interactive" className="viewport" />
+                <canvas className="drawingBuffer"></canvas>
+            </div>
+    )
     }
 }
