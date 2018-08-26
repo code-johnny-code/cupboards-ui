@@ -146,7 +146,7 @@ class ItemModal extends Component {
                     {!this.state.item_Id ? <button><img src="scan.png" alt="Scan button" onClick={ this._scan } /></button> : null}
 
                     <p>{ this.state.upc }</p>
-                    <img src={this.state.onList ? 'onListTrue.png' : 'onListFalse.png'} onClick={this._handleOnListChange}/>
+                    <img src={this.state.onList ? 'onListTrue.png' : 'onListFalse.png'} alt={ 'On list indicator' } onClick={this._handleOnListChange}/>
 
                     { this.state.img_url ? <img src={ this.state.img_url } alt={ this.state.name } /> : null }
                     { this.state.onList ? 

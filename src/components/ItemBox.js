@@ -18,7 +18,6 @@ class ItemBox extends Component {
                 upc: this.props.upc,
                 img_url: this.props.img_url,
                 item_Id: this.props.item_Id,
-                category: this.props.category,
                 onList: this.props.onList,
                 toGet: this.props.toGet
                 })}>
@@ -27,7 +26,7 @@ class ItemBox extends Component {
                     { this.props.bestBy ? <p className={ 'bestBy' }>Best by</p> : <p className={ 'bestBy' }>Use by</p> }
                     <DatePicker className={'datepicker'} disabled={true} selected={ moment(this.props.expiration) }/>
                     <p className={ 'location' }>{ this.props.location.label }</p>
-                    <img className={ 'onList' } src={(this.props.onList) ? 'onListTrue.png'  : 'onListFalse.png'} onClick={this.handleOnListChange}/>
+                    <img className={ 'onList' } src={(this.props.onList) ? 'onListTrue.png'  : 'onListFalse.png'} alt={ 'On list indicator' } onClick={this.handleOnListChange}/>
                 </div>
                 <div className={ 'centerElements' }>
                     <p>{ this.props.name }</p>
