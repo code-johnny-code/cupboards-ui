@@ -5,7 +5,7 @@ import Items from './components/Items';
 import ItemModal from './components/ItemModal';
 import ShoppingModal from './components/ShoppingModal';
 import Login from './components/Login';
-
+const fetch = require('node-fetch');
 
 class App extends Component {
 
@@ -35,9 +35,13 @@ class App extends Component {
     this.retrieveItems();
   }
 
+  componentDidUpdate() {
+    this.updateShopping();
+  }
+
   getCookie(cookiename) {
-  const cookiestring=RegExp(""+cookiename+"[^;]+").exec(document.cookie);
-  return decodeURIComponent(!!cookiestring ? cookiestring.toString().replace(/^[^=]+./,"") : "");
+    const cookiestring=RegExp(""+cookiename+"[^;]+").exec(document.cookie);
+    return decodeURIComponent(!!cookiestring ? cookiestring.toString().replace(/^[^=]+./,"") : "");
   }
 
   handleOpenModal (item) {
@@ -57,14 +61,33 @@ class App extends Component {
 
   handleCloseShopping () {
     this.setState({ showShopping: false });
+    this.retrieveItems();
   }
 
   retrieveItems() {
     const { REACT_APP_LIST_URL } = process.env;
-    const fetch = require('node-fetch');
     fetch(REACT_APP_LIST_URL)
     .then(res => res.json())
     .then(res => this.setState({ items: res }))
+  }
+
+  updateShopping() {
+    const { REACT_APP_SHOPMOD_URL } = process.env;
+    this.state.items.forEach(item => {
+      if (!item.onList && item.minimum && (item.quantity < item.minimum)) {
+        const difference = Number(item.minimum) - Number(item.quantity);
+        const data = { 'item_Id': item._id, 'onList': true, 'toGet': difference }
+        fetch(REACT_APP_SHOPMOD_URL, {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(data)
+        })
+        .then(() => this.retrieveItems())
+      }
+    });
   }
 
   handleLogin() {
