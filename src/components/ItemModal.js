@@ -29,7 +29,8 @@ class ItemModal extends Component {
             activeItemKey: '',
             bestBy: false,
             onList: false,
-            toGet: 1
+            toGet: 1,
+            manualUPC: ''
         }
     
         this._scan = this._scan.bind(this);
@@ -39,6 +40,7 @@ class ItemModal extends Component {
         this._handleBlipEnd = this._handleBlipEnd.bind(this);
         this._handleExpiryChange = this._handleExpiryChange.bind(this);
         this._handleOnListChange = this._handleOnListChange.bind(this);
+        this._UpcSearch = this._UpcSearch.bind(this);
     }
 
     componentWillMount() {
@@ -54,6 +56,19 @@ class ItemModal extends Component {
             blip: false 
         });
       }
+
+    _UpcSearch(upc) {
+        const { REACT_APP_LOOKUP_URL, REACT_APP_LOOKUP_KEY } = process.env;
+        fetch(`${REACT_APP_LOOKUP_URL}/${REACT_APP_LOOKUP_KEY}/${upc}`)
+        .then(res => res.json())
+        .catch(error => error)
+        .then(res => this.setState({
+            upc: upc,
+            name: res.items[0].name,
+            price: `$${res.items[0].salePrice.toFixed(2)}`,
+            img_url: res.items[0].thumbnailImage
+        }))
+    }
     
     _onDetected(results) {
         if (results.codeResult) {
@@ -63,17 +78,7 @@ class ItemModal extends Component {
                 blip: true
             });
             const upc = results.codeResult.code.toString();
-            //TODO Check for and retrieve data (name, image, retailer, category, minimum) for item if upc exists in cupboards database
-            const { REACT_APP_LOOKUP_URL, REACT_APP_LOOKUP_KEY } = process.env;
-            fetch(`${REACT_APP_LOOKUP_URL}/${REACT_APP_LOOKUP_KEY}/${upc}`)
-            .then(res => res.json())
-            .catch(error => error)
-            .then(res => this.setState({
-                upc: upc,
-                name: res.items[0].name,
-                price: `$${res.items[0].salePrice.toFixed(2)}`,
-                img_url: res.items[0].thumbnailImage
-            }))
+            this._UpcSearch(upc);
         }
         this.setState({scanning: false})
     }
@@ -144,8 +149,13 @@ class ItemModal extends Component {
                 {this.state.scanning ? <Scanner onDetected={this._onDetected} /> : 
                 <div>
                     {!this.state.item_Id ? <button><img src="scan.png" alt="Scan button" onClick={ this._scan } /></button> : null}
-
-                    <p>{ this.state.upc }</p>
+                    <div>
+                        <label>
+                            UPC:
+                            <input type="text" id="upc" value={ this.state.upc } onChange={ this._handleChange } />
+                            <button onClick={ () => this._UpcSearch(this.state.upc) } >Search</button>
+                        </label>
+                    </div>
                     <img src={this.state.onList ? 'onListTrue.png' : 'onListFalse.png'} alt={ 'On list indicator' } onClick={this._handleOnListChange}/>
 
                     { this.state.img_url ? <img src={ this.state.img_url } alt={ this.state.name } /> : null }
