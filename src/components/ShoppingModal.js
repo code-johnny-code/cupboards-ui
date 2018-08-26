@@ -51,7 +51,7 @@ class ShoppingModal extends Component {
                             <h2>{ retailer !== undefined ? retailer.charAt(0).toUpperCase() + retailer.slice(1) : 'No Retailer Specified' }</h2>
                             { this._itemsByRetailer(retailer).map(item => {
                                 return (
-                                    <div>
+                                    <div key={ retailer } >
                                         <p key={ item.name }>{ item.toGet }x { item.name }</p>
                                         <button>Remove</button>
                                     </div>
@@ -63,8 +63,12 @@ class ShoppingModal extends Component {
                 }) }
                 <button onClick={ this._handleShoppingAdd } >Add</button>
                 <button onClick={ this.props.handleCloseShopping }>Close</button>
-                <button onClick={ this._clearShoppingList }>Clear List</button>
-                <button onClick={ window.print }>Print</button>
+                { this.state.items.length ? 
+                <div>
+                    <button onClick={ this._clearShoppingList }>Clear List</button>
+                    <button onClick={ window.print }>Print</button>
+                </div>
+                : null }
             </ReactModal>
         );
     }
