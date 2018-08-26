@@ -28,7 +28,8 @@ class ItemModal extends Component {
             minimum: 0,
             activeItemKey: '',
             bestBy: false,
-            onList: false
+            onList: false,
+            toGet: 1
         }
     
         this._scan = this._scan.bind(this);
@@ -146,7 +147,15 @@ class ItemModal extends Component {
 
                     <p>{ this.state.upc }</p>
                     <img src={this.state.onList ? 'onListTrue.png' : 'onListFalse.png'} onClick={this._handleOnListChange}/>
+
                     { this.state.img_url ? <img src={ this.state.img_url } alt={ this.state.name } /> : null }
+                    { this.state.onList ? 
+                    <div>
+                        <label>
+                            How many?:
+                            <input type="number" id='toGet' value={ this.state.toGet } onChange={ this._handleChange } />
+                        </label>
+                    </div> : null }
                     <div>
                         <label>
                             Name:
