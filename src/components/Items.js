@@ -41,7 +41,8 @@ class Items extends Component {
             itemPrice={link.price} 
             category={link.category} 
             bestBy={link.bestBy}
-            onList={link.onList}/>
+            onList={link.onList}
+            toGet={link.toGet}/>
         });
         return (
             listItems

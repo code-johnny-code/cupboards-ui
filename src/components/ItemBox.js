@@ -19,7 +19,8 @@ class ItemBox extends Component {
                 img_url: this.props.img_url,
                 item_Id: this.props.item_Id,
                 category: this.props.category,
-                onList: this.props.onList
+                onList: this.props.onList,
+                toGet: this.props.toGet
                 })}>
                 <div className={ 'numberLoc' }>
                     <p className={ 'quantity' }>{ this.props.quantity }</p>
