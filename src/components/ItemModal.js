@@ -29,8 +29,7 @@ class ItemModal extends Component {
             activeItemKey: '',
             bestBy: false,
             onList: false,
-            toGet: 1,
-            manualUPC: ''
+            toGet: 1
         }
     
         this._scan = this._scan.bind(this);
