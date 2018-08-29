@@ -108,7 +108,7 @@ class ShoppingModal extends Component {
                 }) }
                 { this.state.addingItem ? 
                     <div>
-                        <input type="number" id='quantity' placeholder={ 'How many?' } value={ this.state.toGet } onChange={ this._handleChange } />
+                        <input type="number" id='toGet' placeholder={ 'How many?' } value={ this.state.toGet } onChange={ this._handleChange } />
                         <input type="text" id='name' placeholder={ 'Name' } value={ this.state.name } onChange={ this._handleChange } />
                         <Select options={[
                                 { id:'retailer', value: 'target', label: 'Target' },
