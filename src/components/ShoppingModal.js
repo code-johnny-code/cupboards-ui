@@ -53,7 +53,7 @@ class ShoppingModal extends Component {
                                 return (
                                     <div key={ retailer } >
                                         <p key={ item.name }>{ item.toGet }x { item.name }</p>
-                                        <button>Remove</button>
+                                        {/* <button>Remove</button> */}
                                     </div>
                                 )
                             }) }
@@ -61,7 +61,7 @@ class ShoppingModal extends Component {
                         </div>
                     )
                 }) }
-                <button onClick={ this._handleShoppingAdd } >Add</button>
+                {/* <button onClick={ this._handleShoppingAdd } >Add</button> */}
                 <button onClick={ this.props.handleCloseShopping }>Close</button>
                 { this.state.items.length ? 
                 <div>
