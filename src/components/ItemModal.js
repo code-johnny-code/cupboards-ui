@@ -76,7 +76,7 @@ class ItemModal extends Component {
                     name: res.items[0].name,
                     price: (res.items[0].salePrice) ? `$${Number(res.items[0].salePrice).toFixed(2)}` : 'No price data',
                     img_url: res.items[0].thumbnailImage,
-                    retailer: res.items[0].retailer.value ? res.items[0].retailer : ''
+                    retailer: res.items[0].retailer ? res.items[0].retailer : ''
                 })
             }
         })
