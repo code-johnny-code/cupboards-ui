@@ -40,6 +40,7 @@ class ItemModal extends Component {
         this._handleExpiryChange = this._handleExpiryChange.bind(this);
         this._handleOnListChange = this._handleOnListChange.bind(this);
         this._UpcSearch = this._UpcSearch.bind(this);
+        this._handleImgRemove = this._handleImgRemove.bind(this);
     }
 
     componentWillMount() {
@@ -154,6 +155,10 @@ class ItemModal extends Component {
           })
       }
 
+      _handleImgRemove() {
+          this.setState({img_url: ''})
+      }
+
     render() {
         console.log(this.state.retailer);
         return (
@@ -251,6 +256,7 @@ class ItemModal extends Component {
                     <button disabled={ !this.state.name } onClick={ this._handleAddItem } >{ this.state.item_Id ? 'Save changes' : 'Add item' }</button>
                     <button onClick={ this.props.handleCloseModal } >Cancel</button>
                     { this.state.item_Id ? <button onClick={ () => this._handleDelete(this.state.item_Id) }>Delete</button> : null }
+                    { this.state.img_url ? <button onClick={ () => this._handleImgRemove }>Remove Image</button> : null }
                 </div>}
             </ReactModal>
         );
