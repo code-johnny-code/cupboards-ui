@@ -256,7 +256,7 @@ class ItemModal extends Component {
                     <button disabled={ !this.state.name } onClick={ this._handleAddItem } >{ this.state.item_Id ? 'Save changes' : 'Add item' }</button>
                     <button onClick={ this.props.handleCloseModal } >Cancel</button>
                     { this.state.item_Id ? <button onClick={ () => this._handleDelete(this.state.item_Id) }>Delete</button> : null }
-                    { this.state.img_url ? <button onClick={ () => this._handleImgRemove }>Remove Image</button> : null }
+                    { this.state.img_url ? <button onClick={ this._handleImgRemove }>Remove Image</button> : null }
                 </div>}
             </ReactModal>
         );
