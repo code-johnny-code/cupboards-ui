@@ -233,6 +233,7 @@ class ItemModal extends Component {
                                 { id:'retailer', value: 'walmart', label: 'Walmart' },
                                 { id:'retailer', value: 'aldi', label: 'Aldi' },
                                 { id:'retailer', value: 'costco', label: 'Costco' },
+                                { id:'retailer', value: 'other', label: 'Other' }
                             ]} value={this.state.retailer} isSearchable={false} onChange={ this._handleChange }/>
                         </label>
                     </div>
