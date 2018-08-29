@@ -44,7 +44,7 @@ class ItemModal extends Component {
 
     componentWillMount() {
         ReactModal.setAppElement('body');
-        if (Object.keys(this.props.activeItem).length > 0) {
+        if (this.props.activeItem.name) {
             this.setState({...this.props.activeItem});
         }
     }
@@ -61,12 +61,24 @@ class ItemModal extends Component {
         fetch(`${REACT_APP_LOOKUP_URL}/${REACT_APP_LOOKUP_KEY}/${upc}`)
         .then(res => res.json())
         .catch(error => error)
-        .then(res => this.setState({
-            upc: upc,
-            name: res.items[0].name,
-            price: `$${res.items[0].salePrice.toFixed(2)}`,
-            img_url: res.items[0].thumbnailImage
-        }))
+        .then(res => {
+            if (res.errors) {
+                this.setState({
+                    upc: upc,
+                    name: 'Item not found at Walmart',
+                    price: `No price data`,
+                    img_url: ''
+                })
+            }
+            else {
+                this.setState({
+                    upc: upc,
+                    name: res.items[0].name,
+                    price: `$${res.items[0].salePrice.toFixed(2)}`,
+                    img_url: res.items[0].thumbnailImage
+                })
+            }
+        })
     }
     
     _onDetected(results) {
