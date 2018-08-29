@@ -70,7 +70,7 @@ class ItemModal extends Component {
                     img_url: ''
                 })
             }
-            else {
+            else if (res.items.length) {
                 this.setState({
                     upc: upc,
                     name: res.items[0].name,
